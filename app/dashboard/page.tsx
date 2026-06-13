@@ -8,6 +8,19 @@ type Event = { id: string; title: string; description: string; start_date: strin
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
 const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 
+const COLORS = {
+  bg: '#0B0F19',
+  card: '#111827',
+  border: '#1F2937',
+  cyan: '#00D2FF',
+  mint: '#00F5A0',
+  white: '#FFFFFF',
+  muted: '#6B7280',
+  adminColor: '#00D2FF',
+  employeeColor: '#00F5A0',
+  clientColor: '#A78BFA',
+}
+
 export default function Dashboard() {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [events, setEvents] = useState<Event[]>([])
@@ -65,41 +78,51 @@ export default function Dashboard() {
     })
   }
 
-  const roleColor = { admin: '#7C3AED', employee: '#2563EB', client: '#059669' }[profile?.role || 'client']
+  const roleColor = profile?.role === 'admin' ? COLORS.adminColor : profile?.role === 'employee' ? COLORS.employeeColor : COLORS.clientColor
   const today = new Date()
 
-  if (loading) return <div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh' }}>Loading...</div>
+  if (loading) return <div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', background:COLORS.bg, color:COLORS.white }}>Loading...</div>
 
   const days = getDaysInMonth(currentDate)
   const selectedEvents = selectedDate ? getEventsForDay(parseInt(selectedDate)) : []
 
+  const inputStyle = { width:'100%', padding:'0.6rem 0.9rem', background:'#1F2937', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, fontSize:'0.9rem', boxSizing:'border-box' as const, outline:'none' }
+
   return (
-    <div style={{ minHeight:'100vh', background:'#f0f4f8', fontFamily:'sans-serif' }}>
+    <div style={{ minHeight:'100vh', background:COLORS.bg, fontFamily:'sans-serif', color:COLORS.white }}>
+      {/* Glow */}
+      <div style={{ position:'fixed', top:0, left:0, width:'400px', height:'400px', background:`radial-gradient(circle, ${COLORS.cyan}11, transparent 70%)`, pointerEvents:'none' }} />
+      <div style={{ position:'fixed', bottom:0, right:0, width:'400px', height:'400px', background:`radial-gradient(circle, ${COLORS.mint}11, transparent 70%)`, pointerEvents:'none' }} />
+
       {/* Header */}
-      <div style={{ background:'white', padding:'1rem 2rem', display:'flex', justifyContent:'space-between', alignItems:'center', boxShadow:'0 1px 4px rgba(0,0,0,0.08)' }}>
-        <h1 style={{ margin:0, fontSize:'1.25rem' }}>📅 Agency Calendar</h1>
-        <div style={{ display:'flex', alignItems:'center', gap:'1rem' }}>
-          <span style={{ background:roleColor, color:'white', padding:'4px 12px', borderRadius:'20px', fontSize:'0.8rem', fontWeight:600, textTransform:'capitalize' as const }}>{profile?.role}</span>
-          <span style={{ color:'#666', fontSize:'0.9rem' }}>{profile?.email}</span>
-          <button onClick={signOut} style={{ padding:'6px 16px', border:'1px solid #ddd', borderRadius:'8px', cursor:'pointer', background:'white' }}>Sign Out</button>
+      <div style={{ background:'#0D1117', borderBottom:`1px solid ${COLORS.border}`, padding:'1rem 2rem', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
+          <span style={{ fontSize:'1.4rem' }}>📅</span>
+          <h1 style={{ margin:0, fontSize:'1.1rem', fontWeight:700, background:`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>Agency Calendar</h1>
+        </div>
+        <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
+          <span style={{ background:`${roleColor}22`, color:roleColor, padding:'4px 12px', borderRadius:'20px', fontSize:'0.8rem', fontWeight:600, textTransform:'capitalize' as const, border:`1px solid ${roleColor}44` }}>{profile?.role}</span>
+          <span style={{ color:COLORS.muted, fontSize:'0.85rem' }}>{profile?.email}</span>
+          {profile?.role === 'admin' && (
+            <a href="/users" style={{ padding:'6px 14px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, textDecoration:'none', fontSize:'0.85rem', background:'#1F2937' }}>👥 Users</a>
+          )}
+          <button onClick={signOut} style={{ padding:'6px 14px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', cursor:'pointer', background:'#1F2937', color:COLORS.white, fontSize:'0.85rem' }}>Sign Out</button>
         </div>
       </div>
 
-      <div style={{ maxWidth:'1000px', margin:'2rem auto', padding:'0 1rem' }}>
-        {/* Month navigation */}
+      <div style={{ maxWidth:'1100px', margin:'2rem auto', padding:'0 1rem' }}>
+        {/* Month nav */}
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1.5rem' }}>
-          <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth()-1))} style={{ padding:'8px 16px', border:'1px solid #ddd', borderRadius:'8px', cursor:'pointer', background:'white', fontSize:'1rem' }}>←</button>
-          <h2 style={{ margin:0, fontSize:'1.4rem' }}>{MONTHS[currentDate.getMonth()]} {currentDate.getFullYear()}</h2>
-          <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth()+1))} style={{ padding:'8px 16px', border:'1px solid #ddd', borderRadius:'8px', cursor:'pointer', background:'white', fontSize:'1rem' }}>→</button>
+          <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth()-1))} style={{ padding:'8px 16px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', cursor:'pointer', background:'#1F2937', color:COLORS.white, fontSize:'1rem' }}>←</button>
+          <h2 style={{ margin:0, fontSize:'1.3rem', fontWeight:600 }}>{MONTHS[currentDate.getMonth()]} {currentDate.getFullYear()}</h2>
+          <button onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth()+1))} style={{ padding:'8px 16px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', cursor:'pointer', background:'#1F2937', color:COLORS.white, fontSize:'1rem' }}>→</button>
         </div>
 
         {/* Calendar grid */}
-        <div style={{ background:'white', borderRadius:'12px', overflow:'hidden', boxShadow:'0 2px 8px rgba(0,0,0,0.08)', marginBottom:'1.5rem' }}>
-          {/* Day headers */}
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)', background:'#f8f9fa' }}>
-            {DAYS.map(d => <div key={d} style={{ padding:'0.75rem', textAlign:'center', fontSize:'0.8rem', fontWeight:600, color:'#666' }}>{d}</div>)}
+        <div style={{ background:COLORS.card, borderRadius:'16px', overflow:'hidden', border:`1px solid ${COLORS.border}`, marginBottom:'1.5rem' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)', background:'#0D1117', borderBottom:`1px solid ${COLORS.border}` }}>
+            {DAYS.map(d => <div key={d} style={{ padding:'0.75rem', textAlign:'center', fontSize:'0.75rem', fontWeight:600, color:COLORS.muted, letterSpacing:'0.05em' }}>{d}</div>)}
           </div>
-          {/* Day cells */}
           <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)' }}>
             {days.map((day, i) => {
               const isToday = day && today.getDate()===day && today.getMonth()===currentDate.getMonth() && today.getFullYear()===currentDate.getFullYear()
@@ -107,14 +130,14 @@ export default function Dashboard() {
               const dayEvents = day ? getEventsForDay(day) : []
               return (
                 <div key={i} onClick={() => day && setSelectedDate(String(day))}
-                  style={{ minHeight:'90px', padding:'8px', borderRight:'0.5px solid #f0f0f0', borderBottom:'0.5px solid #f0f0f0', cursor:day?'pointer':'default', background: isSelected?'#EEF2FF': isToday?'#FFF7ED':'white', transition:'background 0.1s' }}>
+                  style={{ minHeight:'90px', padding:'8px', borderRight:`0.5px solid ${COLORS.border}`, borderBottom:`0.5px solid ${COLORS.border}`, cursor:day?'pointer':'default', background: isSelected?`${COLORS.cyan}11`: isToday?`${COLORS.mint}08`:COLORS.card, transition:'background 0.1s' }}>
                   {day && (
                     <>
-                      <div style={{ width:'28px', height:'28px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'0.85rem', fontWeight: isToday?700:400, background: isToday?roleColor:'transparent', color: isToday?'white':'#333', marginBottom:'4px' }}>{day}</div>
+                      <div style={{ width:'28px', height:'28px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'0.85rem', fontWeight: isToday?700:400, background: isToday?`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`:'transparent', color: isToday?COLORS.bg:COLORS.white, marginBottom:'4px' }}>{day}</div>
                       {dayEvents.slice(0,2).map(e => (
-                        <div key={e.id} style={{ fontSize:'0.7rem', background:roleColor+'22', color:roleColor, padding:'2px 6px', borderRadius:'4px', marginBottom:'2px', overflow:'hidden', whiteSpace:'nowrap' as const, textOverflow:'ellipsis' }}>{e.title}</div>
+                        <div key={e.id} style={{ fontSize:'0.7rem', background:`${roleColor}22`, color:roleColor, padding:'2px 6px', borderRadius:'4px', marginBottom:'2px', overflow:'hidden', whiteSpace:'nowrap' as const, textOverflow:'ellipsis', border:`1px solid ${roleColor}33` }}>{e.title}</div>
                       ))}
-                      {dayEvents.length > 2 && <div style={{ fontSize:'0.65rem', color:'#999' }}>+{dayEvents.length-2} more</div>}
+                      {dayEvents.length > 2 && <div style={{ fontSize:'0.65rem', color:COLORS.muted }}>+{dayEvents.length-2} more</div>}
                     </>
                   )}
                 </div>
@@ -123,14 +146,14 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Selected day events + Add button */}
+        {/* Bottom bar */}
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1rem' }}>
-          <h3 style={{ margin:0, color:'#444' }}>
+          <h3 style={{ margin:0, color:COLORS.muted, fontSize:'0.95rem' }}>
             {selectedDate ? `Events on ${MONTHS[currentDate.getMonth()]} ${selectedDate}` : 'Click a day to see events'}
           </h3>
           {profile?.role === 'admin' && (
-            <button onClick={() => { setShowAddEvent(!showAddEvent); if(selectedDate) setNewEvent(n => ({...n, start_date: `${currentDate.getFullYear()}-${String(currentDate.getMonth()+1).padStart(2,'0')}-${selectedDate.padStart(2,'0')}T09:00`, end_date: `${currentDate.getFullYear()}-${String(currentDate.getMonth()+1).padStart(2,'0')}-${selectedDate.padStart(2,'0')}T10:00`})) }}
-              style={{ padding:'8px 20px', background:'#4F46E5', color:'white', border:'none', borderRadius:'8px', cursor:'pointer' }}>
+            <button onClick={() => { setShowAddEvent(!showAddEvent); if(selectedDate) setNewEvent(n => ({...n, start_date:`${currentDate.getFullYear()}-${String(currentDate.getMonth()+1).padStart(2,'0')}-${selectedDate.padStart(2,'0')}T09:00`, end_date:`${currentDate.getFullYear()}-${String(currentDate.getMonth()+1).padStart(2,'0')}-${selectedDate.padStart(2,'0')}T10:00`})) }}
+              style={{ padding:'8px 20px', background:`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`, color:COLORS.bg, border:'none', borderRadius:'8px', cursor:'pointer', fontWeight:700, fontSize:'0.9rem' }}>
               + Add Event
             </button>
           )}
@@ -138,34 +161,34 @@ export default function Dashboard() {
 
         {/* Add event form */}
         {showAddEvent && (
-          <div style={{ background:'white', padding:'1.5rem', borderRadius:'12px', marginBottom:'1rem', boxShadow:'0 2px 8px rgba(0,0,0,0.08)' }}>
-            <h3 style={{ margin:'0 0 1rem' }}>New Event</h3>
-            <input placeholder="Title*" value={newEvent.title} onChange={e => setNewEvent({...newEvent, title:e.target.value})} style={{ width:'100%', padding:'0.6rem', marginBottom:'0.75rem', border:'1px solid #ddd', borderRadius:'8px', boxSizing:'border-box' as const }} />
-            <input placeholder="Description" value={newEvent.description} onChange={e => setNewEvent({...newEvent, description:e.target.value})} style={{ width:'100%', padding:'0.6rem', marginBottom:'0.75rem', border:'1px solid #ddd', borderRadius:'8px', boxSizing:'border-box' as const }} />
+          <div style={{ background:COLORS.card, padding:'1.5rem', borderRadius:'12px', marginBottom:'1rem', border:`1px solid ${COLORS.border}` }}>
+            <h3 style={{ margin:'0 0 1rem', color:COLORS.white }}>New Event</h3>
+            <input placeholder="Title*" value={newEvent.title} onChange={e => setNewEvent({...newEvent, title:e.target.value})} style={{...inputStyle, marginBottom:'0.75rem'}} />
+            <input placeholder="Description" value={newEvent.description} onChange={e => setNewEvent({...newEvent, description:e.target.value})} style={{...inputStyle, marginBottom:'0.75rem'}} />
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.75rem', marginBottom:'0.75rem' }}>
-              <div><label style={{ fontSize:'0.8rem', color:'#666' }}>Start</label><input type="datetime-local" value={newEvent.start_date} onChange={e => setNewEvent({...newEvent, start_date:e.target.value})} style={{ width:'100%', padding:'0.6rem', border:'1px solid #ddd', borderRadius:'8px', boxSizing:'border-box' as const }} /></div>
-              <div><label style={{ fontSize:'0.8rem', color:'#666' }}>End</label><input type="datetime-local" value={newEvent.end_date} onChange={e => setNewEvent({...newEvent, end_date:e.target.value})} style={{ width:'100%', padding:'0.6rem', border:'1px solid #ddd', borderRadius:'8px', boxSizing:'border-box' as const }} /></div>
+              <div><label style={{ fontSize:'0.8rem', color:COLORS.muted, display:'block', marginBottom:'4px' }}>Start</label><input type="datetime-local" value={newEvent.start_date} onChange={e => setNewEvent({...newEvent, start_date:e.target.value})} style={inputStyle} /></div>
+              <div><label style={{ fontSize:'0.8rem', color:COLORS.muted, display:'block', marginBottom:'4px' }}>End</label><input type="datetime-local" value={newEvent.end_date} onChange={e => setNewEvent({...newEvent, end_date:e.target.value})} style={inputStyle} /></div>
             </div>
-            <select value={newEvent.visible_to} onChange={e => setNewEvent({...newEvent, visible_to:e.target.value})} style={{ width:'100%', padding:'0.6rem', marginBottom:'1rem', border:'1px solid #ddd', borderRadius:'8px', boxSizing:'border-box' as const }}>
+            <select value={newEvent.visible_to} onChange={e => setNewEvent({...newEvent, visible_to:e.target.value})} style={{...inputStyle, marginBottom:'1rem'}}>
               <option value="all">Visible to Everyone</option>
               <option value="employee">Employees Only</option>
               <option value="client">Clients Only</option>
             </select>
-            <button onClick={addEvent} style={{ padding:'8px 24px', background:'#4F46E5', color:'white', border:'none', borderRadius:'8px', cursor:'pointer' }}>Save Event</button>
+            <button onClick={addEvent} style={{ padding:'8px 24px', background:`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`, color:COLORS.bg, border:'none', borderRadius:'8px', cursor:'pointer', fontWeight:700 }}>Save Event</button>
           </div>
         )}
 
-        {/* Events for selected day */}
-        {selectedDate && selectedEvents.length === 0 && <div style={{ background:'white', padding:'2rem', borderRadius:'12px', textAlign:'center', color:'#999' }}>No events on this day.</div>}
+        {/* Events list */}
+        {selectedDate && selectedEvents.length === 0 && <div style={{ background:COLORS.card, padding:'2rem', borderRadius:'12px', textAlign:'center', color:COLORS.muted, border:`1px solid ${COLORS.border}` }}>No events on this day.</div>}
         {selectedEvents.map(event => (
-          <div key={event.id} style={{ background:'white', padding:'1.25rem', borderRadius:'12px', marginBottom:'0.75rem', boxShadow:'0 1px 4px rgba(0,0,0,0.06)', borderLeft:`4px solid ${roleColor}` }}>
+          <div key={event.id} style={{ background:COLORS.card, padding:'1.25rem', borderRadius:'12px', marginBottom:'0.75rem', border:`1px solid ${COLORS.border}`, borderLeft:`3px solid ${roleColor}` }}>
             <div style={{ display:'flex', justifyContent:'space-between' }}>
               <div>
-                <h3 style={{ margin:'0 0 0.25rem', fontSize:'1rem' }}>{event.title}</h3>
-                <p style={{ margin:'0 0 0.5rem', color:'#666', fontSize:'0.9rem' }}>{event.description}</p>
-                <p style={{ margin:0, fontSize:'0.8rem', color:'#999' }}>{new Date(event.start_date).toLocaleString()} → {new Date(event.end_date).toLocaleString()}</p>
+                <h3 style={{ margin:'0 0 0.25rem', fontSize:'1rem', color:COLORS.white }}>{event.title}</h3>
+                <p style={{ margin:'0 0 0.5rem', color:COLORS.muted, fontSize:'0.9rem' }}>{event.description}</p>
+                <p style={{ margin:0, fontSize:'0.8rem', color:COLORS.muted }}>{new Date(event.start_date).toLocaleString()} → {new Date(event.end_date).toLocaleString()}</p>
               </div>
-              <span style={{ fontSize:'0.75rem', background:'#f0f4f8', padding:'3px 10px', borderRadius:'20px', color:'#666', height:'fit-content' }}>{event.visible_to}</span>
+              <span style={{ fontSize:'0.75rem', background:`${roleColor}22`, padding:'3px 10px', borderRadius:'20px', color:roleColor, height:'fit-content', border:`1px solid ${roleColor}33` }}>{event.visible_to}</span>
             </div>
           </div>
         ))}

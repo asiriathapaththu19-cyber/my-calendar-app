@@ -6,7 +6,7 @@ import { supabase } from '../../../lib/supabase'
 const COLORS = {
   bg: '#0B0F19', card: '#111827', border: '#1F2937',
   cyan: '#00D2FF', mint: '#00F5A0', white: '#FFFFFF', muted: '#6B7280',
-  employee: '#00F5A0', client: '#A78BFA',
+  creator: '#00F5A0', client: '#A78BFA',
 }
 
 export default function JoinPage() {
@@ -19,12 +19,12 @@ export default function JoinPage() {
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
 
-  const validRoles = ['employee', 'client']
+  const validRoles = ['creator', 'client']
   if (!validRoles.includes(role)) return (
     <div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', background:COLORS.bg, color:COLORS.white }}>Invalid invite link.</div>
   )
 
-  const roleColor = role === 'employee' ? COLORS.employee : COLORS.client
+  const roleColor = role === 'creator' ? COLORS.creator : COLORS.client
   const roleLabel = role.charAt(0).toUpperCase() + role.slice(1)
 
   const handleSignUp = async () => {

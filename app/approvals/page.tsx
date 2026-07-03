@@ -136,7 +136,7 @@ export default function ApprovalsPage() {
           )}
         </div>
 
-        {/* Request form for employees/clients */}
+        {/* Request form for creators/clients */}
         {showRequestForm && profile?.role !== 'admin' && (
           <div style={{ background:COLORS.card, padding:'1.5rem', borderRadius:'12px', marginBottom:'1.5rem', border:`1px solid ${COLORS.cyan}44` }}>
             <h3 style={{ margin:'0 0 1rem', color:COLORS.cyan }}>New Change Request</h3>

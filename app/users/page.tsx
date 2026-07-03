@@ -7,7 +7,7 @@ type Profile = { id: string; email: string; role: string; full_name: string; cre
 const COLORS = {
   bg: '#0B0F19', card: '#111827', border: '#1F2937',
   cyan: '#00D2FF', mint: '#00F5A0', white: '#FFFFFF', muted: '#6B7280',
-  super_admin: '#FF6B6B', admin: '#00D2FF', employee: '#00F5A0', client: '#A78BFA',
+  super_admin: '#FF6B6B', admin: '#00D2FF', creator: '#00F5A0', client: '#A78BFA',
 }
 
 export default function UsersPage() {
@@ -38,7 +38,7 @@ export default function UsersPage() {
   const roleColor: Record<string, string> = {
     super_admin: COLORS.super_admin,
     admin: COLORS.admin,
-    employee: COLORS.employee,
+    creator: COLORS.creator,
     client: COLORS.client
   }
 
@@ -47,7 +47,7 @@ export default function UsersPage() {
     all: profiles.length,
     super_admin: profiles.filter(p=>p.role==='super_admin').length,
     admin: profiles.filter(p=>p.role==='admin').length,
-    employee: profiles.filter(p=>p.role==='employee').length,
+    creator: profiles.filter(p=>p.role==='creator').length,
     client: profiles.filter(p=>p.role==='client').length,
   }
 
@@ -90,7 +90,7 @@ export default function UsersPage() {
 
         {/* Stats */}
         <div style={{ display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:'1rem', marginBottom:'1.5rem' }}>
-          {(['all','super_admin','admin','employee','client'] as const).map(r => (
+          {(['all','super_admin','admin','creator','client'] as const).map(r => (
             <div key={r} onClick={() => setFilter(r)} style={{ background:COLORS.card, padding:'1rem', borderRadius:'12px', textAlign:'center', cursor:'pointer', border: filter===r ? `1px solid ${r==='all'?COLORS.cyan:roleColor[r]}` : `1px solid ${COLORS.border}`, transition:'border 0.15s' }}>
               <div style={{ fontSize:'1.5rem', fontWeight:700, color: r==='all'?COLORS.cyan:roleColor[r] }}>{counts[r]}</div>
               <div style={{ fontSize:'0.7rem', color:COLORS.muted, textTransform:'capitalize', marginTop:'2px' }}>{r==='all'?'Total':r.replace('_',' ')+'s'}</div>
@@ -124,7 +124,7 @@ export default function UsersPage() {
                     style={{ padding:'4px 10px', border:`1px solid ${roleColor[p.role]}44`, borderRadius:'8px', fontSize:'0.85rem', color:roleColor[p.role], background:`${roleColor[p.role]}22`, cursor:'pointer', fontWeight:500, outline:'none' }}>
                     <option value="super_admin">Super Admin</option>
                     <option value="admin">Admin</option>
-                    <option value="employee">Employee</option>
+                    <option value="creator">creator</option>
                     <option value="client">Client</option>
                   </select>
                 ) : (
@@ -147,7 +147,7 @@ export default function UsersPage() {
           <div style={{ background:COLORS.card, borderRadius:'12px', padding:'1.5rem', border:`1px solid ${COLORS.border}` }}>
             <h3 style={{ margin:'0 0 1rem', fontSize:'1rem', color:COLORS.white }}>🔗 Invite Links</h3>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem' }}>
-              {['employee','client'].map(r => (
+              {['creator','client'].map(r => (
                 <div key={r} style={{ padding:'0.75rem 1rem', background:`${roleColor[r]}11`, borderRadius:'8px', display:'flex', justifyContent:'space-between', alignItems:'center', border:`1px solid ${roleColor[r]}33` }}>
                   <div>
                     <div style={{ fontSize:'0.8rem', fontWeight:600, color:roleColor[r], textTransform:'capitalize' as const, marginBottom:'2px' }}>{r} invite</div>

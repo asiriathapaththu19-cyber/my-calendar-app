@@ -24,6 +24,7 @@ export default function ApprovalsPage() {
   const [myEvents, setMyEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
   const [showRequestForm, setShowRequestForm] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [requestType, setRequestType] = useState('edit')
   const [adminNote, setAdminNote] = useState<Record<string, string>>({})
@@ -106,20 +107,67 @@ export default function ApprovalsPage() {
   if (loading) return <div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', background:COLORS.bg, color:COLORS.white }}>Loading...</div>
 
   return (
-    <div style={{ minHeight:'100vh', background:COLORS.bg, fontFamily:'sans-serif', color:COLORS.white }}>
+    <div style={{ minHeight:'100vh', background:COLORS.bg, fontFamily:'sans-serif', color:COLORS.white, paddingBottom:'2rem' }}>
       <div style={{ position:'fixed', top:0, left:0, width:'400px', height:'400px', background:`radial-gradient(circle, ${COLORS.cyan}11, transparent 70%)`, pointerEvents:'none' }} />
       <div style={{ position:'fixed', bottom:0, right:0, width:'400px', height:'400px', background:`radial-gradient(circle, ${COLORS.mint}11, transparent 70%)`, pointerEvents:'none' }} />
 
       {/* Header */}
-      <div style={{ background:'#0D1117', borderBottom:`1px solid ${COLORS.border}`, padding:'1rem 2rem', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+      <div style={{ background:'#0D1117', borderBottom:`1px solid ${COLORS.border}`, padding:'1rem 1.5rem', display:'flex', justifyContent:'space-between', alignItems:'center', position:'relative', zIndex:10 }}>
         <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
           <span style={{ fontSize:'1.4rem' }}>📅</span>
           <h1 style={{ margin:0, fontSize:'1.1rem', fontWeight:700, background:`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>Aprawebix Digital</h1>
         </div>
-        <div style={{ display:'flex', gap:'0.75rem' }}>
+        
+        {/* Desktop Header Navigation */}
+        <div className="hide-on-mobile" style={{ display:'flex', gap:'0.75rem', alignItems:'center' }}>
           <a href="/dashboard" style={{ padding:'6px 16px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, textDecoration:'none', fontSize:'0.85rem', background:'#1F2937' }}>← Calendar</a>
           {profile?.role === 'admin' && <a href="/users" style={{ padding:'6px 16px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, textDecoration:'none', fontSize:'0.85rem', background:'#1F2937' }}>👥 Users</a>}
           <button onClick={async () => { await supabase.auth.signOut(); window.location.href = '/' }} style={{ padding:'6px 16px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', cursor:'pointer', background:'#1F2937', color:COLORS.white, fontSize:'0.85rem' }}>Sign Out</button>
+        </div>
+
+        {/* Mobile Hamburger Trigger */}
+        <div className="show-on-mobile">
+          <button onClick={() => setIsDrawerOpen(true)} style={{ background:'transparent', border:'none', color:COLORS.white, fontSize:'1.5rem', cursor:'pointer', padding:'4px 8px' }}>
+            ☰
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Navigation Drawer Backdrop */}
+      {isDrawerOpen && <div className="drawer-backdrop" onClick={() => setIsDrawerOpen(false)} />}
+
+      {/* Mobile Navigation Drawer Panel */}
+      <div className={`mobile-nav-drawer ${isDrawerOpen ? 'open' : ''}`}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1.5rem', borderBottom:`1px solid ${COLORS.border}`, paddingBottom:'1rem' }}>
+          <div>
+            <div style={{ fontSize:'0.85rem', color:COLORS.muted }}>Signed in as</div>
+            <div style={{ fontSize:'0.9rem', fontWeight:600, color:COLORS.white, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'200px' }}>{profile?.email}</div>
+          </div>
+          <button onClick={() => setIsDrawerOpen(false)} style={{ background:'transparent', border:'none', color:COLORS.muted, fontSize:'1.5rem', cursor:'pointer' }}>×</button>
+        </div>
+
+        <div style={{ display:'flex', flexDirection:'column', gap:'1rem', flex:1 }}>
+          <div style={{ marginBottom:'0.5rem' }}>
+            <span style={{ background:`${profile?.role === 'admin' || profile?.role === 'super_admin' ? '#00D2FF' : '#A78BFA'}22`, color:profile?.role === 'admin' || profile?.role === 'super_admin' ? '#00D2FF' : '#A78BFA', padding:'4px 12px', borderRadius:'20px', fontSize:'0.8rem', fontWeight:600, border:`1px solid ${profile?.role === 'admin' || profile?.role === 'super_admin' ? '#00D2FF' : '#A78BFA'}44`, display:'inline-block' }}>
+              {profile?.role === 'super_admin' ? '⭐ Super Admin' : profile?.role}
+            </span>
+          </div>
+
+          <a href="/dashboard" style={{ width:'100%', padding:'10px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, textDecoration:'none', fontSize:'0.9rem', background:'#1F2937', textAlign:'center', boxSizing:'border-box' }}>
+            📅 Go to Calendar
+          </a>
+
+          {profile?.role === 'admin' && (
+            <a href="/users" style={{ width:'100%', padding:'10px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, textDecoration:'none', fontSize:'0.9rem', background:'#1F2937', textAlign:'center', boxSizing:'border-box' }}>
+              👥 Manage Users
+            </a>
+          )}
+
+          <div style={{ marginTop:'auto', borderTop:`1px solid ${COLORS.border}`, paddingTop:'1rem' }}>
+            <button onClick={async () => { await supabase.auth.signOut(); window.location.href = '/' }} style={{ width:'100%', padding:'10px', border:`1px solid ${COLORS.danger}44`, borderRadius:'8px', cursor:'pointer', background:`${COLORS.danger}11`, color:COLORS.danger, fontSize:'0.9rem', fontWeight:600 }}>
+              Sign Out
+            </button>
+          </div>
         </div>
       </div>
 
@@ -136,37 +184,41 @@ export default function ApprovalsPage() {
           )}
         </div>
 
-        {/* Request form for creators/clients */}
+        {/* Request form for creators/clients (rendered as overlay modal / bottom sheet) */}
         {showRequestForm && profile?.role !== 'admin' && (
-          <div style={{ background:COLORS.card, padding:'1.5rem', borderRadius:'12px', marginBottom:'1.5rem', border:`1px solid ${COLORS.cyan}44` }}>
-            <h3 style={{ margin:'0 0 1rem', color:COLORS.cyan }}>New Change Request</h3>
-            <div style={{ marginBottom:'0.75rem' }}>
-              <label style={{ fontSize:'0.8rem', color:COLORS.muted, display:'block', marginBottom:'4px' }}>Select Event</label>
-              <select onChange={e => setSelectedEvent(myEvents.find(ev => ev.id === e.target.value) || null)} style={inputStyle}>
-                <option value="">-- Choose an event --</option>
-                {myEvents.map(ev => <option key={ev.id} value={ev.id}>{ev.title}</option>)}
-              </select>
-            </div>
-            <div style={{ marginBottom:'0.75rem' }}>
-              <label style={{ fontSize:'0.8rem', color:COLORS.muted, display:'block', marginBottom:'4px' }}>Request Type</label>
-              <select value={requestType} onChange={e => setRequestType(e.target.value)} style={inputStyle}>
-                <option value="edit">Request Edit</option>
-                <option value="delete">Request Delete</option>
-              </select>
-            </div>
-            {requestType === 'edit' && (
-              <>
-                <input placeholder={`New title (current: ${selectedEvent?.title || ''})`} value={newRequest.proposed_title} onChange={e => setNewRequest({...newRequest, proposed_title:e.target.value})} style={{...inputStyle, marginBottom:'0.75rem'}} />
-                <input placeholder="New description" value={newRequest.proposed_description} onChange={e => setNewRequest({...newRequest, proposed_description:e.target.value})} style={{...inputStyle, marginBottom:'0.75rem'}} />
-                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.75rem', marginBottom:'0.75rem' }}>
-                  <div><label style={{ fontSize:'0.8rem', color:COLORS.muted, display:'block', marginBottom:'4px' }}>New Start</label><input type="datetime-local" value={newRequest.proposed_start_date} onChange={e => setNewRequest({...newRequest, proposed_start_date:e.target.value})} style={inputStyle} /></div>
-                  <div><label style={{ fontSize:'0.8rem', color:COLORS.muted, display:'block', marginBottom:'4px' }}>New End</label><input type="datetime-local" value={newRequest.proposed_end_date} onChange={e => setNewRequest({...newRequest, proposed_end_date:e.target.value})} style={inputStyle} /></div>
+          <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && setShowRequestForm(false)}>
+            <div className="modal-content-container">
+              <div style={{ background:COLORS.card, padding:'1.5rem', borderRadius:'12px', border:`1px solid ${COLORS.cyan}44` }}>
+                <h3 style={{ margin:'0 0 1rem', color:COLORS.cyan }}>New Change Request</h3>
+                <div style={{ marginBottom:'0.75rem' }}>
+                  <label style={{ fontSize:'0.8rem', color:COLORS.muted, display:'block', marginBottom:'4px' }}>Select Event</label>
+                  <select onChange={e => setSelectedEvent(myEvents.find(ev => ev.id === e.target.value) || null)} style={inputStyle}>
+                    <option value="">-- Choose an event --</option>
+                    {myEvents.map(ev => <option key={ev.id} value={ev.id}>{ev.title}</option>)}
+                  </select>
                 </div>
-              </>
-            )}
-            <div style={{ display:'flex', gap:'0.75rem', marginTop:'1rem' }}>
-              <button onClick={submitRequest} style={{ padding:'8px 24px', background:`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`, color:COLORS.bg, border:'none', borderRadius:'8px', cursor:'pointer', fontWeight:700 }}>Submit Request</button>
-              <button onClick={() => setShowRequestForm(false)} style={{ padding:'8px 24px', background:'transparent', color:COLORS.muted, border:`1px solid ${COLORS.border}`, borderRadius:'8px', cursor:'pointer' }}>Cancel</button>
+                <div style={{ marginBottom:'0.75rem' }}>
+                  <label style={{ fontSize:'0.8rem', color:COLORS.muted, display:'block', marginBottom:'4px' }}>Request Type</label>
+                  <select value={requestType} onChange={e => setRequestType(e.target.value)} style={inputStyle}>
+                    <option value="edit">Request Edit</option>
+                    <option value="delete">Request Delete</option>
+                  </select>
+                </div>
+                {requestType === 'edit' && (
+                  <>
+                    <input placeholder={`New title (current: ${selectedEvent?.title || ''})`} value={newRequest.proposed_title} onChange={e => setNewRequest({...newRequest, proposed_title:e.target.value})} style={{...inputStyle, marginBottom:'0.75rem'}} />
+                    <input placeholder="New description" value={newRequest.proposed_description} onChange={e => setNewRequest({...newRequest, proposed_description:e.target.value})} style={{...inputStyle, marginBottom:'0.75rem'}} />
+                    <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))', gap:'0.75rem', marginBottom:'0.75rem' }}>
+                      <div><label style={{ fontSize:'0.8rem', color:COLORS.muted, display:'block', marginBottom:'4px' }}>New Start</label><input type="datetime-local" value={newRequest.proposed_start_date} onChange={e => setNewRequest({...newRequest, proposed_start_date:e.target.value})} style={inputStyle} /></div>
+                      <div><label style={{ fontSize:'0.8rem', color:COLORS.muted, display:'block', marginBottom:'4px' }}>New End</label><input type="datetime-local" value={newRequest.proposed_end_date} onChange={e => setNewRequest({...newRequest, proposed_end_date:e.target.value})} style={inputStyle} /></div>
+                    </div>
+                  </>
+                )}
+                <div style={{ display:'flex', gap:'0.75rem', marginTop:'1rem' }}>
+                  <button onClick={submitRequest} style={{ padding:'8px 24px', background:`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`, color:COLORS.bg, border:'none', borderRadius:'8px', cursor:'pointer', fontWeight:700 }}>Submit Request</button>
+                  <button onClick={() => setShowRequestForm(false)} style={{ padding:'8px 24px', background:'transparent', color:COLORS.muted, border:`1px solid ${COLORS.border}`, borderRadius:'8px', cursor:'pointer' }}>Cancel</button>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -182,7 +234,7 @@ export default function ApprovalsPage() {
           <div key={approval.id} style={{ background:COLORS.card, padding:'1.5rem', borderRadius:'12px', marginBottom:'0.75rem', border:`1px solid ${COLORS.border}`, borderLeft:`3px solid ${statusColor[approval.status]}` }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'1rem' }}>
               <div>
-                <div style={{ display:'flex', alignItems:'center', gap:'0.5rem', marginBottom:'0.25rem' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:'0.5rem', marginBottom:'0.25rem', flexWrap:'wrap' }}>
                   <span style={{ fontSize:'0.8rem', background:`${approval.request_type==='delete'?COLORS.danger:COLORS.cyan}22`, color:approval.request_type==='delete'?COLORS.danger:COLORS.cyan, padding:'2px 10px', borderRadius:'20px', border:`1px solid ${approval.request_type==='delete'?COLORS.danger:COLORS.cyan}44`, fontWeight:600 }}>
                     {approval.request_type === 'delete' ? '🗑️ Delete Request' : '✏️ Edit Request'}
                   </span>
@@ -197,7 +249,7 @@ export default function ApprovalsPage() {
             </div>
 
             {approval.request_type === 'edit' && (
-              <div style={{ background:'#0B0F19', padding:'1rem', borderRadius:'8px', marginBottom:'1rem' }}>
+              <div style={{ background:'#0B0F19', padding:'1rem', borderRadius:'8px', marginBottom:'1rem', overflowWrap:'break-word' }}>
                 <p style={{ margin:'0 0 0.5rem', fontSize:'0.85rem', color:COLORS.muted }}>Proposed changes:</p>
                 {approval.proposed_title !== approval.event?.title && <p style={{ margin:'0 0 0.25rem', fontSize:'0.9rem' }}><span style={{ color:COLORS.muted }}>Title:</span> <span style={{ color:COLORS.cyan }}>{approval.proposed_title}</span></p>}
                 {approval.proposed_description !== approval.event?.description && <p style={{ margin:'0 0 0.25rem', fontSize:'0.9rem' }}><span style={{ color:COLORS.muted }}>Description:</span> <span style={{ color:COLORS.cyan }}>{approval.proposed_description}</span></p>}
@@ -211,13 +263,13 @@ export default function ApprovalsPage() {
             )}
 
             {profile?.role === 'admin' && approval.status === 'pending' && (
-              <div style={{ display:'flex', gap:'0.75rem', alignItems:'center', flexWrap:'wrap' as const }}>
-                <input placeholder="Add a note (optional)" value={adminNote[approval.id]||''} onChange={e => setAdminNote({...adminNote, [approval.id]:e.target.value})}
-                  style={{ flex:1, minWidth:'200px', padding:'0.5rem 0.9rem', background:'#1F2937', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, fontSize:'0.85rem', outline:'none' }} />
-                <button onClick={() => handleApproval(approval, 'approved')}
-                  style={{ padding:'6px 20px', background:`${COLORS.mint}22`, color:COLORS.mint, border:`1px solid ${COLORS.mint}44`, borderRadius:'8px', cursor:'pointer', fontWeight:600 }}>✅ Approve</button>
-                <button onClick={() => handleApproval(approval, 'rejected')}
-                  style={{ padding:'6px 20px', background:`${COLORS.danger}22`, color:COLORS.danger, border:`1px solid ${COLORS.danger}44`, borderRadius:'8px', cursor:'pointer', fontWeight:600 }}>❌ Reject</button>
+              <div className="mobile-stack-col" style={{ display:'flex', gap:'0.75rem', alignItems:'center' }}>
+                <input className="mobile-full-width" placeholder="Add a note (optional)" value={adminNote[approval.id]||''} onChange={e => setAdminNote({...adminNote, [approval.id]:e.target.value})}
+                  style={{ flex:1, minWidth:'200px', padding:'0.5rem 0.9rem', background:'#1F2937', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, fontSize:'0.85rem', outline:'none', boxSizing:'border-box' }} />
+                <button className="mobile-full-width" onClick={() => handleApproval(approval, 'approved')}
+                  style={{ padding:'6px 20px', background:`${COLORS.mint}22`, color:COLORS.mint, border:`1px solid ${COLORS.mint}44`, borderRadius:'8px', cursor:'pointer', fontWeight:600, boxSizing:'border-box' }}>✅ Approve</button>
+                <button className="mobile-full-width" onClick={() => handleApproval(approval, 'rejected')}
+                  style={{ padding:'6px 20px', background:`${COLORS.danger}22`, color:COLORS.danger, border:`1px solid ${COLORS.danger}44`, borderRadius:'8px', cursor:'pointer', fontWeight:600, boxSizing:'border-box' }}>❌ Reject</button>
               </div>
             )}
           </div>

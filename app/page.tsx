@@ -25,12 +25,12 @@ export default function Home() {
   }
 
   return (
-    <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'#0B0F19', fontFamily:'sans-serif' }}>
+    <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'#0B0F19', fontFamily:'sans-serif', padding:'1rem', boxSizing:'border-box' }}>
       {/* Glow effects */}
       <div style={{ position:'fixed', top:'-20%', left:'-10%', width:'500px', height:'500px', background:'radial-gradient(circle, #00D2FF22, transparent 70%)', pointerEvents:'none' }} />
       <div style={{ position:'fixed', bottom:'-20%', right:'-10%', width:'500px', height:'500px', background:'radial-gradient(circle, #00F5A022, transparent 70%)', pointerEvents:'none' }} />
 
-      <div style={{ background:'#111827', border:'1px solid #1F2937', padding:'2.5rem', borderRadius:'16px', width:'100%', maxWidth:'420px', boxShadow:'0 0 40px rgba(0,210,255,0.08)' }}>
+      <div style={{ background:'#111827', border:'1px solid #1F2937', padding:'2rem 1.5rem', borderRadius:'16px', width:'100%', maxWidth:'420px', boxSizing:'border-box', boxShadow:'0 0 40px rgba(0,210,255,0.08)' }}>
         {/* Logo */}
         <div style={{ textAlign:'center', marginBottom:'2rem' }}>
           <div style={{ fontSize:'2rem', marginBottom:'0.5rem' }}>📅</div>

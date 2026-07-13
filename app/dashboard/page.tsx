@@ -34,12 +34,12 @@ const addDays = (date: string, days: number) => {
 function ClientEventForm({ newEvent, setNewEvent, onSave, onCancel }: any) {
   const inputStyle = { width:'100%', padding:'0.6rem 0.9rem', background:'#1F2937', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, fontSize:'0.9rem', boxSizing:'border-box' as const, outline:'none' }
   return (
-    <div style={{ background:COLORS.card, padding:'1.5rem', borderRadius:'12px', marginBottom:'1rem', border:`1px solid ${COLORS.client}44` }}>
+    <div style={{ background:COLORS.card, padding:'1.5rem', borderRadius:'12px', border:`1px solid ${COLORS.client}44` }}>
       <h3 style={{ margin:'0 0 0.5rem', color:COLORS.client }}>📅 Request New Event</h3>
       <p style={{ margin:'0 0 1rem', fontSize:'0.85rem', color:COLORS.muted }}>Add your event date — our team will handle the rest!</p>
       <input placeholder="Event Title*" value={newEvent.title} onChange={e => setNewEvent((p: any) => ({...p, title:e.target.value}))} style={{...inputStyle, marginBottom:'0.75rem'}} />
       <input placeholder="Description" value={newEvent.description} onChange={e => setNewEvent((p: any) => ({...p, description:e.target.value}))} style={{...inputStyle, marginBottom:'0.75rem'}} />
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.75rem', marginBottom:'1rem' }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))', gap:'0.75rem', marginBottom:'1rem' }}>
         <div>
           <label style={{ fontSize:'0.8rem', color:COLORS.muted, display:'block', marginBottom:'4px' }}>📅 Event Start</label>
           <input type="datetime-local" value={newEvent.start_date} onChange={e => setNewEvent((p: any) => ({...p, start_date:e.target.value}))} style={inputStyle} />
@@ -66,13 +66,13 @@ function AdminEventForm({ data, setData, profiles, onSave, onCancel, saveLabel, 
   }
   const creators = profiles.filter((p: any) => ['creator', 'admin', 'super_admin'].includes(p.role))
   return (
-    <div style={{ background:COLORS.card, padding:'1.5rem', borderRadius:'12px', marginBottom:'1rem', border:`1px solid ${isApproving ? COLORS.mint : COLORS.cyan}44` }}>
+    <div style={{ background:COLORS.card, padding:'1.5rem', borderRadius:'12px', border:`1px solid ${isApproving ? COLORS.mint : COLORS.cyan}44` }}>
       {isApproving && <div style={{ fontSize:'0.85rem', color:COLORS.mint, marginBottom:'1rem', fontWeight:600 }}>✅ Approving client request — set dates and assign team</div>}
       <input placeholder="Title*" value={data.title} onChange={e => setData((p: any) => ({...p, title:e.target.value}))} style={{...inputStyle, marginBottom:'0.75rem'}} />
       <input placeholder="Description" value={data.description} onChange={e => setData((p: any) => ({...p, description:e.target.value}))} style={{...inputStyle, marginBottom:'0.75rem'}} />
       <div style={{ background:'#0B0F19', padding:'1rem', borderRadius:'10px', marginBottom:'0.75rem' }}>
         <div style={{ fontSize:'0.8rem', color:COLORS.muted, marginBottom:'0.75rem', fontWeight:600 }}>📅 EVENT DATES</div>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.75rem', marginBottom:'0.75rem' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))', gap:'0.75rem', marginBottom:'0.75rem' }}>
           <div>
             <label style={{ fontSize:'0.8rem', color:COLORS.cyan, display:'block', marginBottom:'4px' }}>📅 Event Start*</label>
             <input type="datetime-local" value={data.start_date?.slice(0,16)||''} onChange={e => handleEventDateChange(e.target.value)} style={inputStyle} />
@@ -82,7 +82,7 @@ function AdminEventForm({ data, setData, profiles, onSave, onCancel, saveLabel, 
             <input type="datetime-local" value={data.end_date?.slice(0,16)||''} onChange={e => setData((p: any) => ({...p, end_date:e.target.value}))} style={inputStyle} />
           </div>
         </div>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.75rem' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))', gap:'0.75rem' }}>
           <div>
             <label style={{ fontSize:'0.8rem', color:'#F59E0B', display:'block', marginBottom:'4px' }}>🎨 Deadline Date (auto)</label>
             <input type="datetime-local" value={data.deadline_date?.slice(0,16)||''} onChange={e => setData((p: any) => ({...p, deadline_date:e.target.value}))} style={{...inputStyle, border:`1px solid #F59E0B44`}} />
@@ -95,7 +95,7 @@ function AdminEventForm({ data, setData, profiles, onSave, onCancel, saveLabel, 
       </div>
       <div style={{ background:'#0B0F19', padding:'1rem', borderRadius:'10px', marginBottom:'0.75rem' }}>
         <div style={{ fontSize:'0.8rem', color:COLORS.muted, marginBottom:'0.75rem', fontWeight:600 }}>👥 ASSIGN TEAM</div>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.75rem' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(180px, 1fr))', gap:'0.75rem' }}>
           <div>
             <label style={{ fontSize:'0.8rem', color:'#F59E0B', display:'block', marginBottom:'4px' }}>🎨 Assign Creator</label>
             <select value={data.assigned_to_create||''} onChange={e => setData((p: any) => ({...p, assigned_to_create:e.target.value}))} style={inputStyle}>
@@ -112,7 +112,7 @@ function AdminEventForm({ data, setData, profiles, onSave, onCancel, saveLabel, 
           </div>
         </div>
       </div>
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'0.75rem', marginBottom:'1rem' }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(110px, 1fr))', gap:'0.75rem', marginBottom:'1rem' }}>
         <div>
           <label style={{ fontSize:'0.8rem', color:COLORS.muted, display:'block', marginBottom:'4px' }}>Linked Client</label>
           <select value={data.client_id||''} onChange={e => setData((p: any) => ({...p, client_id:e.target.value}))} style={inputStyle}>
@@ -162,6 +162,7 @@ export default function Dashboard() {
   const [calendarView, setCalendarView] = useState<'month'|'week'|'day'|'agenda'>('month')
   const [selectedPeople, setSelectedPeople] = useState<string[]>([])
   const [showPeopleFilter, setShowPeopleFilter] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [newEvent, setNewEvent] = useState({ title:'', description:'', start_date:'', end_date:'', post_date:'', deadline_date:'', visible_to:'all', assigned_to:'', assigned_to_post:'', assigned_to_create:'', client_id:'', status:'pending' })
   const filterRef = useRef<HTMLDivElement>(null)
 
@@ -478,43 +479,85 @@ export default function Dashboard() {
   const MonthView = () => {
     const days = getDaysInMonth(currentDate)
     return (
-      <div style={{ background:COLORS.card, borderRadius:'16px', overflow:'hidden', border:`1px solid ${COLORS.border}` }}>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)', background:'#0D1117', borderBottom:`1px solid ${COLORS.border}` }}>
-          {DAYS.map(d => <div key={d} style={{ padding:'0.75rem', textAlign:'center', fontSize:'0.75rem', fontWeight:600, color:COLORS.muted, letterSpacing:'0.05em' }}>{d}</div>)}
+      <>
+        {/* Desktop Month View */}
+        <div className="desktop-calendar-view" style={{ background:COLORS.card, borderRadius:'16px', overflow:'hidden', border:`1px solid ${COLORS.border}` }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)', background:'#0D1117', borderBottom:`1px solid ${COLORS.border}` }}>
+            {DAYS.map(d => <div key={d} style={{ padding:'0.75rem', textAlign:'center', fontSize:'0.75rem', fontWeight:600, color:COLORS.muted, letterSpacing:'0.05em' }}>{d}</div>)}
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)' }}>
+            {days.map((day, i) => {
+              const cellDate = day ? new Date(currentDate.getFullYear(), currentDate.getMonth(), day) : null
+              const isToday = cellDate && today.toDateString() === cellDate.toDateString()
+              const isSelected = cellDate && selectedDate === cellDate.toDateString()
+              const dayEvents = cellDate ? getEventsForDay(cellDate) : []
+              const hasPending = dayEvents.some(e => e.is_client_request)
+              return (
+                <div key={i} onClick={() => cellDate && setSelectedDate(cellDate.toDateString())}
+                  style={{ minHeight:'90px', padding:'8px', borderRight:`0.5px solid ${COLORS.border}`, borderBottom:`0.5px solid ${COLORS.border}`, cursor:day?'pointer':'default', background: isSelected?`${COLORS.cyan}11`: isToday?`${COLORS.mint}08`:COLORS.card }}>
+                  {day && (
+                    <>
+                      <div style={{ display:'flex', alignItems:'center', gap:'4px', marginBottom:'4px' }}>
+                        <div style={{ width:'28px', height:'28px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'0.85rem', fontWeight: isToday?700:400, background: isToday?`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`:'transparent', color: isToday?COLORS.bg:COLORS.white }}>{day}</div>
+                        {hasPending && <div style={{ width:'6px', height:'6px', borderRadius:'50%', background:COLORS.danger }} />}
+                      </div>
+                      {dayEvents.slice(0,2).map((e, idx) => {
+                        const dateType = getEventDateType(e, cellDate!)
+                        const color = e.is_client_request ? COLORS.danger : dateType === 'deadline' ? '#F59E0B' : dateType === 'post' ? COLORS.mint : COLORS.cyan
+                        return (
+                          <div key={`${e.id}-${idx}`} style={{ fontSize:'0.7rem', background:`${color}22`, color, padding:'2px 6px', borderRadius:'4px', marginBottom:'2px', overflow:'hidden', whiteSpace:'nowrap' as const, textOverflow:'ellipsis', border:`1px solid ${color}33` }}>
+                            {dateType === 'deadline' ? '🎨' : dateType === 'post' ? '📢' : '📅'} {e.title}
+                          </div>
+                        )
+                      })}
+                      {dayEvents.length > 2 && <div style={{ fontSize:'0.65rem', color:COLORS.muted }}>+{dayEvents.length-2} more</div>}
+                    </>
+                  )}
+                </div>
+              )
+            })}
+          </div>
         </div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)' }}>
-          {days.map((day, i) => {
-            const cellDate = day ? new Date(currentDate.getFullYear(), currentDate.getMonth(), day) : null
-            const isToday = cellDate && today.toDateString() === cellDate.toDateString()
-            const isSelected = cellDate && selectedDate === cellDate.toDateString()
-            const dayEvents = cellDate ? getEventsForDay(cellDate) : []
-            const hasPending = dayEvents.some(e => e.is_client_request)
-            return (
-              <div key={i} onClick={() => cellDate && setSelectedDate(cellDate.toDateString())}
-                style={{ minHeight:'90px', padding:'8px', borderRight:`0.5px solid ${COLORS.border}`, borderBottom:`0.5px solid ${COLORS.border}`, cursor:day?'pointer':'default', background: isSelected?`${COLORS.cyan}11`: isToday?`${COLORS.mint}08`:COLORS.card }}>
-                {day && (
-                  <>
-                    <div style={{ display:'flex', alignItems:'center', gap:'4px', marginBottom:'4px' }}>
-                      <div style={{ width:'28px', height:'28px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'0.85rem', fontWeight: isToday?700:400, background: isToday?`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`:'transparent', color: isToday?COLORS.bg:COLORS.white }}>{day}</div>
-                      {hasPending && <div style={{ width:'6px', height:'6px', borderRadius:'50%', background:COLORS.danger }} />}
-                    </div>
-                    {dayEvents.slice(0,2).map((e, idx) => {
-                      const dateType = getEventDateType(e, cellDate!)
-                      const color = e.is_client_request ? COLORS.danger : dateType === 'deadline' ? '#F59E0B' : dateType === 'post' ? COLORS.mint : COLORS.cyan
-                      return (
-                        <div key={`${e.id}-${idx}`} style={{ fontSize:'0.7rem', background:`${color}22`, color, padding:'2px 6px', borderRadius:'4px', marginBottom:'2px', overflow:'hidden', whiteSpace:'nowrap' as const, textOverflow:'ellipsis', border:`1px solid ${color}33` }}>
-                          {dateType === 'deadline' ? '🎨' : dateType === 'post' ? '📢' : '📅'} {e.title}
-                        </div>
-                      )
-                    })}
-                    {dayEvents.length > 2 && <div style={{ fontSize:'0.65rem', color:COLORS.muted }}>+{dayEvents.length-2} more</div>}
-                  </>
-                )}
-              </div>
-            )
-          })}
+
+        {/* Mobile Month View */}
+        <div className="mobile-calendar-view" style={{ background:COLORS.card, borderRadius:'16px', overflow:'hidden', border:`1px solid ${COLORS.border}` }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)', background:'#0D1117', borderBottom:`1px solid ${COLORS.border}` }}>
+            {DAYS.map(d => <div key={d} style={{ padding:'0.5rem 0', textAlign:'center', fontSize:'0.7rem', fontWeight:600, color:COLORS.muted }}>{d.slice(0,2)}</div>)}
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)' }}>
+            {days.map((day, i) => {
+              const cellDate = day ? new Date(currentDate.getFullYear(), currentDate.getMonth(), day) : null
+              const isToday = cellDate && today.toDateString() === cellDate.toDateString()
+              const isSelected = cellDate && selectedDate === cellDate.toDateString()
+              const dayEvents = cellDate ? getEventsForDay(cellDate) : []
+              return (
+                <div key={i} onClick={() => cellDate && setSelectedDate(cellDate.toDateString())}
+                  style={{ minHeight:'48px', padding:'4px 2px', borderRight:`0.5px solid ${COLORS.border}`, borderBottom:`0.5px solid ${COLORS.border}`, cursor:day?'pointer':'default', background: isSelected?`${COLORS.cyan}11`: isToday?`${COLORS.mint}08`:COLORS.card, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', boxSizing:'border-box' }}>
+                  {day && (
+                    <>
+                      <div style={{ width:'22px', height:'22px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'0.75rem', fontWeight: isToday?700:400, background: isToday?`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`:'transparent', color: isToday?COLORS.bg:COLORS.white }}>
+                        {day}
+                      </div>
+                      <div style={{ display:'flex', gap:'2px', justifyContent:'center', height:'6px', marginBottom:'2px', flexWrap:'wrap' }}>
+                        {dayEvents.slice(0,3).map((e, idx) => {
+                          const dateType = getEventDateType(e, cellDate!)
+                          const color = e.is_client_request ? COLORS.danger : dateType === 'deadline' ? '#F59E0B' : dateType === 'post' ? COLORS.mint : COLORS.cyan
+                          return (
+                            <span key={`${e.id}-${idx}-dot`} style={{ width:'4px', height:'4px', borderRadius:'50%', background:color }} />
+                          )
+                        })}
+                        {dayEvents.length > 3 && (
+                          <span style={{ width:'3px', height:'3px', borderRadius:'50%', background:COLORS.muted }} />
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )
+            })}
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
@@ -522,33 +565,36 @@ export default function Dashboard() {
     const weekDays = getWeekDays(currentDate)
     return (
       <div style={{ background:COLORS.card, borderRadius:'16px', overflow:'hidden', border:`1px solid ${COLORS.border}` }}>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)', background:'#0D1117', borderBottom:`1px solid ${COLORS.border}` }}>
-          {weekDays.map((d, i) => {
-            const isToday = d.toDateString() === today.toDateString()
-            return (
-              <div key={i} style={{ padding:'0.75rem', textAlign:'center', borderRight:`0.5px solid ${COLORS.border}` }}>
-                <div style={{ fontSize:'0.75rem', color:COLORS.muted, fontWeight:600 }}>{DAYS[d.getDay()]}</div>
-                <div style={{ width:'32px', height:'32px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', margin:'4px auto 0', fontSize:'0.95rem', fontWeight: isToday?700:500, background: isToday?`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`:'transparent', color: isToday?COLORS.bg:COLORS.white }}>{d.getDate()}</div>
-              </div>
-            )
-          })}
-        </div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)', minHeight:'400px' }}>
+        <div className="mobile-scroll-container" style={{ display:'grid', gridTemplateColumns:'repeat(7,1fr)' }}>
           {weekDays.map((d, i) => {
             const dayEvents = getEventsForDay(d)
             const isToday = d.toDateString() === today.toDateString()
+            const isSelected = d.toDateString() === selectedDate
             return (
-              <div key={i} onClick={() => setSelectedDate(d.toDateString())} style={{ padding:'8px', borderRight:`0.5px solid ${COLORS.border}`, cursor:'pointer', background: isToday?`${COLORS.mint}05`:COLORS.card, minHeight:'400px' }}>
-                {dayEvents.map((e, idx) => {
-                  const dateType = getEventDateType(e, d)
-                  const color = e.is_client_request ? COLORS.danger : dateType === 'deadline' ? '#F59E0B' : dateType === 'post' ? COLORS.mint : COLORS.cyan
-                  return (
-                    <div key={`${e.id}-${idx}`} style={{ fontSize:'0.72rem', background:`${color}22`, color, padding:'4px 6px', borderRadius:'4px', marginBottom:'4px', border:`1px solid ${color}33` }}>
-                      <div style={{ fontWeight:600 }}>{dateType === 'deadline' ? '🎨' : dateType === 'post' ? '📢' : '📅'} {e.title}</div>
-                      <div style={{ opacity:0.8 }}>{new Date(e.start_date).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
+              <div key={i} className="mobile-scroll-item" style={{ borderRight: i < 6 ? `0.5px solid ${COLORS.border}` : 'none', display:'flex', flexDirection:'column', boxSizing:'border-box' }}>
+                {/* Day Header */}
+                <div style={{ padding:'0.75rem', textAlign:'center', background:'#0D1117', borderBottom:`1px solid ${COLORS.border}` }}>
+                  <div style={{ fontSize:'0.75rem', color:COLORS.muted, fontWeight:600 }}>{DAYS[d.getDay()]}</div>
+                  <div style={{ width:'32px', height:'32px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', margin:'4px auto 0', fontSize:'0.95rem', fontWeight: isToday?700:500, background: isToday?`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`:'transparent', color: isToday?COLORS.bg:COLORS.white }}>{d.getDate()}</div>
+                </div>
+                {/* Day Events Column */}
+                <div onClick={() => setSelectedDate(d.toDateString())} style={{ padding:'8px', cursor:'pointer', background: isSelected ? `${COLORS.cyan}11` : isToday ? `${COLORS.mint}05` : COLORS.card, minHeight:'360px', flex:1, display:'flex', flexDirection:'column' }}>
+                  {dayEvents.map((e, idx) => {
+                    const dateType = getEventDateType(e, d)
+                    const color = e.is_client_request ? COLORS.danger : dateType === 'deadline' ? '#F59E0B' : dateType === 'post' ? COLORS.mint : COLORS.cyan
+                    return (
+                      <div key={`${e.id}-${idx}`} style={{ fontSize:'0.72rem', background:`${color}22`, color, padding:'4px 6px', borderRadius:'4px', marginBottom:'4px', border:`1px solid ${color}33` }}>
+                        <div style={{ fontWeight:600 }}>{dateType === 'deadline' ? '🎨' : dateType === 'post' ? '📢' : '📅'} {e.title}</div>
+                        <div style={{ opacity:0.8 }}>{new Date(e.start_date).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
+                      </div>
+                    )
+                  })}
+                  {dayEvents.length === 0 && (
+                    <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', minHeight:'60px' }}>
+                      <span className="show-on-mobile" style={{ fontSize:'0.7rem', color:COLORS.muted, fontStyle:'italic' }}>No events</span>
                     </div>
-                  )
-                })}
+                  )}
+                </div>
               </div>
             )
           })}
@@ -655,7 +701,7 @@ export default function Dashboard() {
                   <div style={{ fontSize:'0.8rem', color:COLORS.muted }}>{grouped[dateStr].length} item{grouped[dateStr].length !== 1 ? 's' : ''}</div>
                 </div>
               </div>
-              <div style={{ marginLeft:'60px' }}>
+              <div style={{ marginLeft:'clamp(12px, 8vw, 60px)' }}>
                 {grouped[dateStr].map(({event, dateType}, idx) => (
                   <EventCard key={`${event.id}-${dateType}-${idx}`} event={event} date={date} compact />
                 ))}
@@ -752,18 +798,20 @@ export default function Dashboard() {
   )
 
   return (
-    <div style={{ minHeight:'100vh', background:COLORS.bg, fontFamily:'sans-serif', color:COLORS.white }}>
+    <div style={{ minHeight:'100vh', background:COLORS.bg, fontFamily:'sans-serif', color:COLORS.white, paddingBottom:'2rem' }}>
       <div style={{ position:'fixed', top:0, left:0, width:'400px', height:'400px', background:`radial-gradient(circle, ${COLORS.cyan}11, transparent 70%)`, pointerEvents:'none' }} />
       <div style={{ position:'fixed', bottom:0, right:0, width:'400px', height:'400px', background:`radial-gradient(circle, ${COLORS.mint}11, transparent 70%)`, pointerEvents:'none' }} />
 
       {/* Header */}
-      <div style={{ background:'#0D1117', borderBottom:`1px solid ${COLORS.border}`, padding:'1rem 2rem', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+      <div style={{ background:'#0D1117', borderBottom:`1px solid ${COLORS.border}`, padding:'1rem 1.5rem', display:'flex', justifyContent:'space-between', alignItems:'center', position:'relative', zIndex:10 }}>
         <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
           <span style={{ fontSize:'1.4rem' }}>📅</span>
           <h1 style={{ margin:0, fontSize:'1.1rem', fontWeight:700, background:`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>Aprawebix Digital</h1>
         </div>
-        <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
-          <span style={{ background:`${roleColor}22`, color:roleColor, padding:'4px 12px', borderRadius:'20px', fontSize:'0.8rem', fontWeight:600, textTransform:'capitalize' as const, border:`1px solid ${roleColor}44` }}>
+        
+        {/* Desktop Header */}
+        <div className="hide-on-mobile" style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
+          <span style={{ background:`${roleColor}22`, color:roleColor, padding:'4px 12px', borderRadius:'20px', fontSize:'0.85rem', fontWeight:600, textTransform:'capitalize' as const, border:`1px solid ${roleColor}44` }}>
             {viewMode === 'creator' ? '🎨 Creator View' : profile?.role === 'super_admin' ? '⭐ Super Admin' : profile?.role}
           </span>
           <span style={{ color:COLORS.muted, fontSize:'0.85rem' }}>{profile?.email}</span>
@@ -783,6 +831,64 @@ export default function Dashboard() {
             )}
           </a>
           <button onClick={signOut} style={{ padding:'6px 14px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', cursor:'pointer', background:'#1F2937', color:COLORS.white, fontSize:'0.85rem' }}>Sign Out</button>
+        </div>
+
+        {/* Mobile Hamburger menu trigger */}
+        <div className="show-on-mobile">
+          <button onClick={() => setIsDrawerOpen(true)} style={{ background:'transparent', border:'none', color:COLORS.white, fontSize:'1.5rem', cursor:'pointer', padding:'4px 8px', display:'flex', alignItems:'center' }}>
+            ☰
+            {isAdminMode && pendingClientRequests.length > 0 && (
+              <span style={{ display:'inline-block', marginLeft:'4px', background:COLORS.danger, width:'8px', height:'8px', borderRadius:'50%' }} />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Navigation Drawer Backdrop */}
+      {isDrawerOpen && <div className="drawer-backdrop" onClick={() => setIsDrawerOpen(false)} />}
+
+      {/* Mobile Navigation Drawer Panel */}
+      <div className={`mobile-nav-drawer ${isDrawerOpen ? 'open' : ''}`}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1.5rem', borderBottom:`1px solid ${COLORS.border}`, paddingBottom:'1rem' }}>
+          <div>
+            <div style={{ fontSize:'0.85rem', color:COLORS.muted }}>Signed in as</div>
+            <div style={{ fontSize:'0.9rem', fontWeight:600, color:COLORS.white, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'200px' }}>{profile?.email}</div>
+          </div>
+          <button onClick={() => setIsDrawerOpen(false)} style={{ background:'transparent', border:'none', color:COLORS.muted, fontSize:'1.5rem', cursor:'pointer' }}>×</button>
+        </div>
+
+        <div style={{ display:'flex', flexDirection:'column', gap:'1rem', flex:1 }}>
+          <div style={{ marginBottom:'0.5rem' }}>
+            <span style={{ background:`${roleColor}22`, color:roleColor, padding:'4px 12px', borderRadius:'20px', fontSize:'0.8rem', fontWeight:600, textTransform:'capitalize' as const, border:`1px solid ${roleColor}44`, display:'inline-block' }}>
+              {viewMode === 'creator' ? '🎨 Creator View' : profile?.role === 'super_admin' ? '⭐ Super Admin' : profile?.role}
+            </span>
+          </div>
+
+          {(profile?.role === 'admin' || profile?.role === 'super_admin') && (
+            <button onClick={() => { setViewMode(viewMode === 'admin' ? 'creator' : 'admin'); setSelectedDate(null); setSelectedPeople([]); setIsDrawerOpen(false) }}
+              style={{ width:'100%', padding:'10px', border:`1px solid ${COLORS.cyan}44`, borderRadius:'8px', color:COLORS.cyan, background:`${COLORS.cyan}22`, fontSize:'0.9rem', cursor:'pointer', fontWeight:600, textAlign:'center' }}>
+              {viewMode === 'admin' ? '🎨 Switch to Creator View' : '🛠 Switch to Admin View'}
+            </button>
+          )}
+
+          {isAdminMode && (
+            <a href="/users" style={{ width:'100%', padding:'10px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, textDecoration:'none', fontSize:'0.9rem', background:'#1F2937', textAlign:'center', boxSizing:'border-box' }}>
+              👥 Manage Users
+            </a>
+          )}
+
+          <a href="/approvals" style={{ width:'100%', padding:'10px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, textDecoration:'none', fontSize:'0.9rem', background:'#1F2937', textAlign:'center', position:'relative' as const, boxSizing:'border-box' }}>
+            🔔 Approval Requests
+            {isAdminMode && pendingClientRequests.length > 0 && (
+              <span style={{ position:'absolute', top:'-6px', right:'-6px', background:COLORS.danger, color:COLORS.white, borderRadius:'50%', width:'18px', height:'18px', fontSize:'0.7rem', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:700 }}>{pendingClientRequests.length}</span>
+            )}
+          </a>
+
+          <div style={{ marginTop:'auto', borderTop:`1px solid ${COLORS.border}`, paddingTop:'1rem' }}>
+            <button onClick={signOut} style={{ width:'100%', padding:'10px', border:`1px solid ${COLORS.danger}44`, borderRadius:'8px', cursor:'pointer', background:`${COLORS.danger}11`, color:COLORS.danger, fontSize:'0.9rem', fontWeight:600 }}>
+              Sign Out
+            </button>
+          </div>
         </div>
       </div>
 
@@ -810,46 +916,71 @@ export default function Dashboard() {
         )}
 
         {/* Nav + View switcher */}
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1.5rem' }}>
-          <button onClick={() => navigateDate(-1)} style={{ padding:'8px 16px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', cursor:'pointer', background:'#1F2937', color:COLORS.white, fontSize:'1rem' }}>←</button>
-          <div style={{ display:'flex', alignItems:'center', gap:'1rem' }}>
-            <h2 style={{ margin:0, fontSize:'1.1rem', fontWeight:600 }}>{getHeaderTitle()}</h2>
-            <div style={{ display:'flex', gap:'4px', background:'#1F2937', padding:'4px', borderRadius:'8px' }}>
-              {(['month','week','day','agenda'] as const).map(v => (
-                <button key={v} onClick={() => setCalendarView(v)}
-                  style={{ padding:'4px 12px', borderRadius:'6px', border:'none', cursor:'pointer', fontSize:'0.8rem', fontWeight:600, textTransform:'capitalize' as const, background: calendarView===v?`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`:'transparent', color: calendarView===v?COLORS.bg:COLORS.muted }}>
-                  {v}
-                </button>
-              ))}
-            </div>
+        <div className="mobile-stack-col" style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1.5rem', gap:'1rem' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:'1rem', justifyContent:'space-between', width:'100%', maxWidth:'400px' }}>
+            <button onClick={() => navigateDate(-1)} style={{ padding:'8px 16px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', cursor:'pointer', background:'#1F2937', color:COLORS.white, fontSize:'1rem' }}>←</button>
+            <h2 style={{ margin:0, fontSize:'1.1rem', fontWeight:600, textAlign:'center' }}>{getHeaderTitle()}</h2>
+            <button onClick={() => navigateDate(1)} style={{ padding:'8px 16px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', cursor:'pointer', background:'#1F2937', color:COLORS.white, fontSize:'1rem' }}>→</button>
           </div>
-          <button onClick={() => navigateDate(1)} style={{ padding:'8px 16px', border:`1px solid ${COLORS.border}`, borderRadius:'8px', cursor:'pointer', background:'#1F2937', color:COLORS.white, fontSize:'1rem' }}>→</button>
+          <div className="mobile-full-width" style={{ display:'flex', gap:'4px', background:'#1F2937', padding:'4px', borderRadius:'8px', boxSizing:'border-box', justifyContent:'space-evenly' }}>
+            {(['month','week','day','agenda'] as const).map(v => (
+              <button key={v} onClick={() => setCalendarView(v)}
+                style={{ flex:1, padding:'6px 8px', borderRadius:'6px', border:'none', cursor:'pointer', fontSize:'0.8rem', fontWeight:600, textTransform:'capitalize' as const, background: calendarView===v?`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`:'transparent', color: calendarView===v?COLORS.bg:COLORS.muted }}>
+                {v}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Search + Filter + Add */}
-        <div style={{ display:'flex', gap:'0.75rem', alignItems:'center', marginBottom:'1rem', flexWrap:'wrap' as const }}>
-          <input placeholder="🔍 Search events..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-            style={{ flex:1, minWidth:'200px', padding:'0.6rem 0.9rem', background:'#1F2937', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, fontSize:'0.9rem', outline:'none' }} />
-          <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)}
-            style={{ padding:'0.6rem 0.9rem', background:'#1F2937', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, fontSize:'0.9rem', outline:'none' }}>
+        <div className="mobile-stack-col" style={{ display:'flex', gap:'0.75rem', alignItems:'center', marginBottom:'1rem' }}>
+          <input className="mobile-full-width" placeholder="🔍 Search events..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+            style={{ flex:1, minWidth:'200px', padding:'0.6rem 0.9rem', background:'#1F2937', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, fontSize:'0.9rem', outline:'none', boxSizing:'border-box' }} />
+          <select className="mobile-full-width" value={filterStatus} onChange={e => setFilterStatus(e.target.value)}
+            style={{ padding:'0.6rem 0.9rem', background:'#1F2937', border:`1px solid ${COLORS.border}`, borderRadius:'8px', color:COLORS.white, fontSize:'0.9rem', outline:'none', boxSizing:'border-box' }}>
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
             <option value="in_progress">In Progress</option>
             <option value="completed">Completed</option>
           </select>
-          {isAdminMode && <PeopleFilterDropdown />}
+          {isAdminMode && <div className="mobile-full-width" style={{ width:'auto' }}><PeopleFilterDropdown /></div>}
           {(isAdminMode || isClient) && (
-            <button onClick={() => { setShowAddEvent(!showAddEvent); setEditingEvent(null); setApprovingEvent(null) }}
-              style={{ padding:'8px 20px', background: isClient?`linear-gradient(135deg, ${COLORS.client}, #7C5CBF)`:`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`, color: isClient?COLORS.white:COLORS.bg, border:'none', borderRadius:'8px', cursor:'pointer', fontWeight:700, fontSize:'0.9rem' }}>
+            <button className="mobile-full-width" onClick={() => { setShowAddEvent(!showAddEvent); setEditingEvent(null); setApprovingEvent(null) }}
+              style={{ padding:'8px 20px', background: isClient?`linear-gradient(135deg, ${COLORS.client}, #7C5CBF)`:`linear-gradient(135deg, ${COLORS.cyan}, ${COLORS.mint})`, color: isClient?COLORS.white:COLORS.bg, border:'none', borderRadius:'8px', cursor:'pointer', fontWeight:700, fontSize:'0.9rem', boxSizing:'border-box' }}>
               {isClient ? '+ Request Event' : '+ Add Event'}
             </button>
           )}
         </div>
 
-        {showAddEvent && isClient && <ClientEventForm newEvent={newEvent} setNewEvent={setNewEvent} onSave={addEvent} onCancel={() => setShowAddEvent(false)} />}
-        {showAddEvent && isAdminMode && <AdminEventForm data={newEvent} setData={setNewEvent} profiles={profiles} onSave={addEvent} onCancel={() => setShowAddEvent(false)} saveLabel="Save Event" />}
-        {editingEvent && isAdminMode && <AdminEventForm data={editingEvent} setData={setEditingEvent} profiles={profiles} onSave={saveEdit} onCancel={() => setEditingEvent(null)} saveLabel="Save Changes" />}
-        {approvingEvent && isAdminMode && <AdminEventForm data={approvingEvent} setData={setApprovingEvent} profiles={profiles} onSave={approveEvent} onCancel={() => setApprovingEvent(null)} saveLabel="✅ Approve & Save" isApproving />}
+        {/* Forms Overlay Modals (Slide-up bottom sheets on mobile) */}
+        {showAddEvent && isClient && (
+          <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && setShowAddEvent(false)}>
+            <div className="modal-content-container">
+              <ClientEventForm newEvent={newEvent} setNewEvent={setNewEvent} onSave={addEvent} onCancel={() => setShowAddEvent(false)} />
+            </div>
+          </div>
+        )}
+        {showAddEvent && isAdminMode && (
+          <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && setShowAddEvent(false)}>
+            <div className="modal-content-container">
+              <AdminEventForm data={newEvent} setData={setNewEvent} profiles={profiles} onSave={addEvent} onCancel={() => setShowAddEvent(false)} saveLabel="Save Event" />
+            </div>
+          </div>
+        )}
+        {editingEvent && isAdminMode && (
+          <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && setEditingEvent(null)}>
+            <div className="modal-content-container">
+              <AdminEventForm data={editingEvent} setData={setEditingEvent} profiles={profiles} onSave={saveEdit} onCancel={() => setEditingEvent(null)} saveLabel="Save Changes" />
+            </div>
+          </div>
+        )}
+        {approvingEvent && isAdminMode && (
+          <div className="modal-backdrop" onClick={(e) => e.target === e.currentTarget && setApprovingEvent(null)}>
+            <div className="modal-content-container">
+              <AdminEventForm data={approvingEvent} setData={setApprovingEvent} profiles={profiles} onSave={approveEvent} onCancel={() => setApprovingEvent(null)} saveLabel="✅ Approve & Save" isApproving />
+            </div>
+          </div>
+        )}
 
         {calendarView === 'month' && <MonthView />}
         {calendarView === 'week' && <WeekView />}

@@ -43,9 +43,9 @@ export default function JoinPage() {
   const inputStyle = { width:'100%', padding:'0.75rem 1rem', background:'#1F2937', border:`1px solid ${COLORS.border}`, borderRadius:'10px', fontSize:'0.95rem', color:COLORS.white, boxSizing:'border-box' as const, outline:'none', marginBottom:'0.75rem' }
 
   if (done) return (
-    <div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', background:COLORS.bg, fontFamily:'sans-serif' }}>
+    <div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', background:COLORS.bg, fontFamily:'sans-serif', padding:'1rem', boxSizing:'border-box' }}>
       <div style={{ position:'fixed', top:0, left:0, width:'400px', height:'400px', background:`radial-gradient(circle, ${roleColor}22, transparent 70%)`, pointerEvents:'none' }} />
-      <div style={{ background:COLORS.card, padding:'2.5rem', borderRadius:'16px', maxWidth:'400px', width:'100%', textAlign:'center', border:`1px solid ${COLORS.border}`, boxShadow:`0 0 40px ${roleColor}22` }}>
+      <div style={{ background:COLORS.card, padding:'2rem 1.5rem', borderRadius:'16px', maxWidth:'400px', width:'100%', boxSizing:'border-box', textAlign:'center', border:`1px solid ${COLORS.border}`, boxShadow:`0 0 40px ${roleColor}22` }}>
         <div style={{ fontSize:'3rem', marginBottom:'1rem' }}>🎉</div>
         <h2 style={{ marginBottom:'0.5rem', color:COLORS.white }}>Account Created!</h2>
         <p style={{ color:COLORS.muted, marginBottom:'1.5rem' }}>Your {roleLabel} account is ready.</p>
@@ -55,11 +55,11 @@ export default function JoinPage() {
   )
 
   return (
-    <div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', background:COLORS.bg, fontFamily:'sans-serif' }}>
+    <div style={{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', background:COLORS.bg, fontFamily:'sans-serif', padding:'1rem', boxSizing:'border-box' }}>
       <div style={{ position:'fixed', top:0, right:0, width:'400px', height:'400px', background:`radial-gradient(circle, ${COLORS.cyan}11, transparent 70%)`, pointerEvents:'none' }} />
       <div style={{ position:'fixed', bottom:0, left:0, width:'400px', height:'400px', background:`radial-gradient(circle, ${roleColor}11, transparent 70%)`, pointerEvents:'none' }} />
 
-      <div style={{ background:COLORS.card, padding:'2.5rem', borderRadius:'16px', maxWidth:'420px', width:'100%', border:`1px solid ${COLORS.border}`, boxShadow:`0 0 40px ${roleColor}11` }}>
+      <div style={{ background:COLORS.card, padding:'2rem 1.5rem', borderRadius:'16px', maxWidth:'420px', width:'100%', boxSizing:'border-box', border:`1px solid ${COLORS.border}`, boxShadow:`0 0 40px ${roleColor}11` }}>
         <div style={{ display:'flex', alignItems:'center', gap:'0.75rem', marginBottom:'0.5rem' }}>
           <span style={{ background:`${roleColor}22`, color:roleColor, padding:'4px 14px', borderRadius:'20px', fontSize:'0.85rem', fontWeight:600, border:`1px solid ${roleColor}44` }}>{roleLabel}</span>
           <h1 style={{ margin:0, fontSize:'1.3rem', color:COLORS.white }}>Create your account</h1>

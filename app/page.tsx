@@ -6,13 +6,20 @@ export default function Home() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLogin, setIsLogin] = useState(true)
+  const [isForgotPassword, setIsForgotPassword] = useState(false)
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
 
   const handleAuth = async () => {
     setLoading(true)
     setMessage('')
-    if (isLogin) {
+    if (isForgotPassword) {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://my-calendar-app-chi.vercel.app/reset-password',
+      })
+      if (error) setMessage(error.message)
+      else setMessage('Check your email for the password reset link.')
+    } else if (isLogin) {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) setMessage(error.message)
       else window.location.href = '/dashboard'
@@ -35,7 +42,9 @@ export default function Home() {
         <div style={{ textAlign:'center', marginBottom:'2rem' }}>
           <div style={{ fontSize:'2rem', marginBottom:'0.5rem' }}>📅</div>
           <h1 style={{ margin:'0 0 0.25rem', fontSize:'1.5rem', color:'#FFFFFF', fontWeight:700 }}>Agency Calendar</h1>
-          <p style={{ margin:0, color:'#6B7280', fontSize:'0.9rem' }}>{isLogin ? 'Sign in to your account' : 'Create a new account'}</p>
+          <p style={{ margin:0, color:'#6B7280', fontSize:'0.9rem' }}>
+            {isForgotPassword ? 'Reset your password' : (isLogin ? 'Sign in to your account' : 'Create a new account')}
+          </p>
         </div>
 
         <input
@@ -45,27 +54,40 @@ export default function Home() {
           onChange={e => setEmail(e.target.value)}
           style={{ width:'100%', padding:'0.75rem 1rem', marginBottom:'0.75rem', background:'#1F2937', border:'1px solid #374151', borderRadius:'10px', fontSize:'0.95rem', color:'#FFFFFF', boxSizing:'border-box' as const, outline:'none' }}
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && handleAuth()}
-          style={{ width:'100%', padding:'0.75rem 1rem', marginBottom:'1rem', background:'#1F2937', border:'1px solid #374151', borderRadius:'10px', fontSize:'0.95rem', color:'#FFFFFF', boxSizing:'border-box' as const, outline:'none' }}
-        />
-        {message && <p style={{ color: message.includes('created') ? '#00F5A0' : '#FF6B6B', marginBottom:'1rem', fontSize:'0.9rem' }}>{message}</p>}
+        {!isForgotPassword && (
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleAuth()}
+            style={{ width:'100%', padding:'0.75rem 1rem', marginBottom:'1rem', background:'#1F2937', border:'1px solid #374151', borderRadius:'10px', fontSize:'0.95rem', color:'#FFFFFF', boxSizing:'border-box' as const, outline:'none' }}
+          />
+        )}
+        {message && <p style={{ color: message.includes('created') || message.includes('Check') ? '#00F5A0' : '#FF6B6B', marginBottom:'1rem', fontSize:'0.9rem' }}>{message}</p>}
         <button
           onClick={handleAuth}
           disabled={loading}
           style={{ width:'100%', padding:'0.75rem', background:'linear-gradient(135deg, #00D2FF, #00F5A0)', color:'#0B0F19', border:'none', borderRadius:'10px', fontSize:'1rem', fontWeight:700, cursor:'pointer' }}
         >
-          {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Sign Up'}
+          {loading ? 'Please wait...' : (isForgotPassword ? 'Send Reset Link' : (isLogin ? 'Sign In' : 'Sign Up'))}
         </button>
         <p style={{ textAlign:'center', marginTop:'1rem', color:'#6B7280', fontSize:'0.9rem' }}>
-          {isLogin ? "Don't have an account? " : "Already have an account? "}
-          <span onClick={() => setIsLogin(!isLogin)} style={{ color:'#00D2FF', cursor:'pointer', fontWeight:500 }}>
-            {isLogin ? 'Sign Up' : 'Sign In'}
-          </span>
+          {isForgotPassword ? (
+            <span onClick={() => setIsForgotPassword(false)} style={{ color:'#00D2FF', cursor:'pointer', fontWeight:500 }}>Back to Login</span>
+          ) : (
+            <>
+              {isLogin ? "Don't have an account? " : "Already have an account? "}
+              <span onClick={() => setIsLogin(!isLogin)} style={{ color:'#00D2FF', cursor:'pointer', fontWeight:500 }}>
+                {isLogin ? 'Sign Up' : 'Sign In'}
+              </span>
+              {isLogin && (
+                <>
+                  <br /><span onClick={() => setIsForgotPassword(true)} style={{ color:'#6B7280', cursor:'pointer', fontSize:'0.8rem', textDecoration:'underline' }}>Forgot password?</span>
+                </>
+              )}
+            </>
+          )}
         </p>
       </div>
     </div>
